@@ -1,0 +1,9 @@
+---
+- hosts: Zeppelin_hosts
+  become: yes
+  vars_files:
+    - vars.yml
+  roles:
+    - jdk
+    - spark
+    - zeppelin

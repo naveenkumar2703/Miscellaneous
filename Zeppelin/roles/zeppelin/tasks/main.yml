@@ -1,0 +1,19 @@
+---
+- name: get zeppelin
+  get_url:
+    url: "{{zeppelin_url}}"
+    dest: "{{zeppelin_tar}}"
+    checksum: md5:"{{zeppelin_md5}}"
+  
+- name: extact zeppelin
+  unarchive:
+    src: "{{zeppelin_tar}}"
+    dest: "{{zeppelin_inst_dir}}"
+    remote_src: yes
+
+- name: Clean artifact path
+  file:
+    state: absent
+    path: "{{zeppelin_tar}}"
+    remote_src: yes
+
