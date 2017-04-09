@@ -1,10 +1,17 @@
 ---
-- hosts: Zeppelin_hosts
+- hosts: All_nodes
   become: yes
   vars_files:
     - vars.yml
   roles:
-    - openssh
-    - jdk
+    #- openssh
+    #- jdk
     - spark
-    - zeppelin
+    #- zeppelin
+
+- hosts: Master_node
+  become: no
+  vars_files:
+    - vars.yml
+  roles:
+    - launch
