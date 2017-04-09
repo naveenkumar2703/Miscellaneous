@@ -10,6 +10,8 @@
     src: "{{zeppelin_tar}}"
     dest: "{{zeppelin_inst_dir}}"
     remote_src: yes
+    owner: "{{cloud_owner}}"
+    group: "{{cloud_group}}"
 
 - name: Clean artifact path
   file:

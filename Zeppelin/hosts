@@ -1,4 +1,4 @@
 [Zeppelin_hosts]
-129.114.33.221 ansible_ssh_user=cc
-129.114.33.105 ansible_ssh_user=cc
+129.114.32.188 ansible_ssh_user=cc
+129.114.33.210 ansible_ssh_user=cc
 

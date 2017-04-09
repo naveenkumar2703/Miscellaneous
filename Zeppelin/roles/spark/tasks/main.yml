@@ -5,14 +5,22 @@
     dest: "{{spark_tar}}"
     checksum: md5:"{{spark_md5}}"
   
-- name: extact spark
+- name: extract spark
   unarchive:
     src: "{{spark_tar}}"
     dest: "{{spark_inst_dir}}"
     remote_src: yes
+    owner: "{{cloud_owner}}"
+    group: "{{cloud_group}}"
 
 - name: Clean artifact path
   file:
     state: absent
     path: "{{spark_tar}}"
     remote_src: yes
+
+- name: add path variable
+  shell: echo SPARK_HOME is $SPARK_HOME
+  environment:
+    SPARK_HOME: "{{spark_path}}"
+    register: shellout
