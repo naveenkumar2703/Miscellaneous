@@ -6,8 +6,8 @@
   roles:
     #- openssh
     #- jdk
-    - spark
-    #- zeppelin
+    #- spark
+    - zeppelin
 
 - hosts: Master_node
   become: no
@@ -15,3 +15,10 @@
     - vars.yml
   roles:
     - launch
+
+- hosts: Zeppelin_node
+  become: no
+  vars_files:
+    - vars.yml
+  roles:
+    - start_zeppelin

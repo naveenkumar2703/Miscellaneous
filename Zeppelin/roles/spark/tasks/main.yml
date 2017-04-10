@@ -48,3 +48,12 @@
     dest: "{{spark_inst_dir}}{{spark_version}}/{{spark_slaves_dest}}"
     mode: 0774
 
+
+- name: Transfer spark default config file
+  copy:
+    owner: "{{cloud_owner}}"
+    group: "{{cloud_group}}"
+    src: "{{ spark_default_conf_src }}"
+    dest: "{{spark_inst_dir}}{{spark_version}}/{{spark_default_conf_dest}}"
+    mode: 0774
+

@@ -1,6 +1,10 @@
 [All_nodes]
-192.168.0.10 ansible_host=129.114.32.188 ansible_ssh_user=cc
-192.168.0.108 ansible_host=129.114.33.210 ansible_ssh_user=cc
+192.168.0.241 ansible_host=129.114.33.179 ansible_ssh_user=cc
+192.168.0.242 ansible_host=129.114.33.109 ansible_ssh_user=cc
+192.168.0.243 ansible_host=129.114.32.188 ansible_ssh_user=cc
 
 [Master_node]
-192.168.0.108 ansible_host=129.114.33.210 ansible_ssh_user=cc
+192.168.0.243 ansible_host=129.114.32.188 ansible_ssh_user=cc
+
+[Zeppelin_node]
+192.168.0.243 ansible_host=129.114.32.188 ansible_ssh_user=cc
