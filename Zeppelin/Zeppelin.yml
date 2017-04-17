@@ -4,9 +4,9 @@
   vars_files:
     - vars.yml
   roles:
-    #- openssh
-    #- jdk
-    #- spark
+    - openssh
+    - jdk
+    - spark
     - zeppelin
 
 - hosts: Master_node
