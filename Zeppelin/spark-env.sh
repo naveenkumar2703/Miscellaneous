@@ -1,5 +1,4 @@
-# config file to be distributed across cluster
-SPARK_MASTER_HOST=192.168.1.21
+# config file to be distributed across cluster 
+SPARK_MASTER_HOST=192.168.1.23
 SPARK_MASTER_PORT=8081
 SPARK_MASTER_WEBUI_PORT=8082
-
