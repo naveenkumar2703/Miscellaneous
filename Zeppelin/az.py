@@ -12,10 +12,10 @@ class VMS(cmd.Cmd):
 
         self.cloud = 'cloud='+cloud
         self.cloudUser = user
-        print "Ignore Error: \n Please define a key first, e.g.: cm key add --ssh <keyname> \n " \
-              "-- If key has been successfully added into the database and uploaded into the cloud \n" \
-              "Ignore Error: \n problem uploading key veera to cloud chameleon: Key pair 'veera' already exists.\n " \
-              "******************************************************************************************************"
+        #print "Ignore Error: \n Please define a key first, e.g.: cm key add --ssh <keyname> \n " \
+        #      "-- If key has been successfully added into the database and uploaded into the cloud \n" \
+        #      "Ignore Error: \n problem uploading key veera to cloud chameleon: Key pair 'veera' already exists.\n " \
+        #      "******************************************************************************************************"
         # result = Shell.cm("reset")
         # print result
         # result = Shell.cm("key add --ssh")
@@ -44,7 +44,44 @@ class VMS(cmd.Cmd):
     def do_setCloud(self, cloud):
 
         self.cloud = "cloud=" + cloud
-        self.setup(cloud=self.cloud)
+        #self.setup(cloud=self.cloud)
+
+    def do_startSpark(self):
+        print 'Starting Spark'
+        "ansible-playbook start_zeppelin.yml - i hosts"
+        if 'chameleon' in self.cloud:
+            deployment_logs = os.popen(
+                'ansible-playbook start_spark.yml -i hosts .log.txt').read()
+        else:
+            deployment_logs = os.popen(
+                'ansible-playbook start_spark_jetstream.yml -i hosts .log.txt').read()
+
+    def do_stopSpark(self):
+        print 'Stopping Spark'
+        if 'chameleon' in self.cloud:
+            deployment_logs = os.popen(
+                'ansible-playbook stop_spark.yml -i hosts .log.txt').read()
+        else:
+            deployment_logs = os.popen(
+                'ansible-playbook stop_spark_jetstream.yml -i hosts .log.txt').read()
+
+    def do_startZeppelin(self):
+        print 'Starting Zeppelin'
+        if 'chameleon' in self.cloud:
+            deployment_logs = os.popen(
+                'ansible-playbook start_zeppelin.yml -i hosts .log.txt').read()
+        else:
+            deployment_logs = os.popen(
+                'ansible-playbook start_zeppelin_jetstream.yml -i hosts .log.txt').read()
+
+    def do_stopZeppelin(self):
+        print 'Stopping Zeppelin'
+        if 'chameleon' in self.cloud:
+            deployment_logs = os.popen(
+                'ansible-playbook stop_zeppelin.yml -i hosts .log.txt').read()
+        else:
+            deployment_logs = os.popen(
+                'ansible-playbook stop_zeppelin_jetstream.yml -i hosts .log.txt').read()
 
     def do_setCloudUser(self, cloudUser):
 
@@ -59,15 +96,15 @@ class VMS(cmd.Cmd):
         print 'user id is set to '+ userId
 
     def do_setMasterIp(self, masterIp):
-        self.masterIp = masterIp
-        print 'master ip is set to '+ masterIp
+        self.masterIp = masterIp.strip()
+        print 'master ip is set to '+ self.masterIp
 
     def do_boot(self, n):
 
         self.floating_ip_list = []
         self.static_ip_list = []
+        boot_start_time = time.time()
         try:
-
             for i in range(int(n)):
                 floating_ip = None
                 static_ip = None
@@ -91,11 +128,11 @@ class VMS(cmd.Cmd):
                             if self.userId in lin:
                                 items = lin.split('|')
                                 static_ip = items[5].strip()
-                                if static_ip not in self.static_ip_list and static_ip is not self.masterIp:
+                                if '.' in static_ip and static_ip not in self.static_ip_list and static_ip != self.masterIp:
                                     self.static_ip_list.append(static_ip)
                                     break
-                        print 'Sleeping for' + str(10 * n) + ' seconds as ip not assigned'
-                        time.sleep(10 * n)
+                        print 'Sleeping for ' + str(20 * (n+1)) + ' seconds as ip not assigned'
+                        time.sleep(20 * (n + 1))
                         n += 1
                         if n > 4:
                             raise Exception('Unable to assign ips')
@@ -134,10 +171,13 @@ class VMS(cmd.Cmd):
             if os.path.exists(os.environ['HOME'] + '/.ssh/known_hosts'):
                 os.remove(os.environ['HOME'] + '/.ssh/known_hosts')
 
-            print "Running the ansible-playbook for zepplin"
-
+            boot_time = boot_start_time - time.time()
+            print 'Time taken to boot:' + str(boot_time)
+            print "Commencing deployment for zepplin"
             # taking password
             password = getpass.getpass("Enter ansible valut password: ")
+            print "Running the ansible-playbook for zepplin"
+            deployment_start_time = time.time()
             tempPassFile = open('.log.txt', 'w')
             tempPassFile.write(password)
             tempPassFile.close()
@@ -173,6 +213,8 @@ class VMS(cmd.Cmd):
                 print "Check deployment logs for errors during deployment"
             else:
                 print "Deployment Successful"
+
+            print "Time took for deployment is:" + str(time.time() - deployment_start_time)
 
     def do_delete(self, names):
 
@@ -277,6 +319,35 @@ class VMS(cmd.Cmd):
         print "        ------------------------------------------------------------------"
         print "          setUserId yourUserName     sets user name as your user name"
 
+    def help_startSpark(self):
+        print "syntax: startSpark\n"
+        print "usage: "
+        print "       |  command   |  description                                        "
+        print "        ------------------------------------------------------------------"
+        print "          startSpark start spark master and slaves"
+
+    def help_stopSpark(self):
+        print "syntax: stopSpark\n"
+        print "usage: "
+        print "       |  command   |  description                                        "
+        print "        ------------------------------------------------------------------"
+        print "          stopSpark stop spark master and slaves"
+
+    def help_startZeppelin(self):
+        print "syntax: startZeppelin\n"
+        print "usage: "
+        print "       |  command   |  description                                        "
+        print "        ------------------------------------------------------------------"
+        print "          startZeppelin start zeppelin on master"
+
+    def help_stopZeppelin(self):
+        print "syntax: stopZeppelin\n"
+        print "usage: "
+        print "       |  command   |  description                                        "
+        print "        ------------------------------------------------------------------"
+        print "          startZeppelin stop zeppelin on master"
+
+
     # ---------shortcuts----------------------
     do_q = do_quit
     do_exit = do_quit
@@ -289,4 +360,3 @@ class VMS(cmd.Cmd):
 if __name__ == "__main__":
     vms = VMS()
     vms.cmdloop()
-

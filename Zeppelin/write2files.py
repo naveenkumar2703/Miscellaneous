@@ -31,7 +31,10 @@ class HostsWriter():
         for sip, fip in zip(staticIPs, floatingIPs):
             if not floating_ip:
                 fip = sip
-            file.write(sip + " ansible_host=" + fip + " ansible_ssh_user=cc \n")
+            file.write(sip + " ansible_host=" + fip + " ansible_ssh_user="+ansible_ssh_user+ " \n")
+
+        if masterIp != None:
+            file.write(masterIp + " ansible_host=" + masterIp + " ansible_ssh_user=" + ansible_ssh_user + " \n")
 
         file.write("\n\n")
         file.write("[Master_node]\n")
@@ -44,6 +47,7 @@ class HostsWriter():
         file.write("[Zeppelin_node]\n")
         if masterIp == None:
             file.write(staticIPs[-1] + " ansible_host=" + floatingIPs[-1] + " ansible_ssh_user="+ansible_ssh_user+ "\n")
+            print 'Master node is at: ' + floatingIPs[-1]
         else:
             file.write(
                 masterIp + " ansible_host=" + masterIp + " ansible_ssh_user=" + ansible_ssh_user + "\n")

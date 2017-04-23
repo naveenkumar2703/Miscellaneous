@@ -2,7 +2,7 @@
 - hosts: Master_node
   become: no
   vars_files:
-    - vars.yml
+    - vars_ch.yml
   roles:
     - stop
 
