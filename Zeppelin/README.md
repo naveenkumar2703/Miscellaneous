@@ -32,8 +32,9 @@ USING SINGLE FLOATING IPs
 1) Boot vm with floating IP and ports 8080 to 8085 open
 2) Get files from git hub.
 3) Set current directory to Zeppelin
-4) Launch az.py using command "python az.py"
-5) set master ip, user id (chameleon or jetstream user id), cloud (chameleon or $
+4) Generate passwordless SSH named spark_rsa in cd.
+5) Launch az.py using command "python az.py"
+6) set master ip, user id (chameleon or jetstream user id), cloud (chameleon or $
    Example (jetstream):
    >> setMasterIp 192.168.1.5
    >> setUserId nramaraj
@@ -48,7 +49,7 @@ USING SINGLE FLOATING IPs
    
   The master ip is static ip of the current machine.
 
-4) now mention numer of nodes and start using boot
+7) now mention numer of nodes and start using boot
    Example: boot 3
 
    Now 3 slave nodes will boot and install in current master node
@@ -62,3 +63,24 @@ Use help for additional information.
 Other important commands are startSpark, startZeppelin, stopSpark and stopZeppelin
 
    
+
+Description of files:
+az.py - main python file for deployment
+write2files.py - updates inventories to hosts file
+Zeppelin.yml - master playbook for chameleon
+Zeppelin_jetstream.yml - master playbook for jetstream
+hosts, slaves, spark-defaults.conf, spark-env.sh - config files for deployment
+vars.yml, vars_ch.yml - variables for jetstream and chameleon cloud
+start_*, stop_* - ansible script to start and stop nodes. To invoke from cmd.
+
+Ansible roles description:
+jdk - to install java
+openssh - install cross ssh
+spark - install spark
+zeppelin - install zeppelin
+launch - start spark master and slaves
+stop - stop spark master and slaves
+start_zeppelin - start zeppelin at master
+stop_zeppelin - stop zeppelin at master
+
+
