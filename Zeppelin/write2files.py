@@ -1,3 +1,7 @@
+# authors: Veera Marni 
+# License: MIT
+# To write hosts and slaves for ansible deployment in inventory file
+
 import os
 
 

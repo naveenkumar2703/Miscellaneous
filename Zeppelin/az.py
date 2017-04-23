@@ -1,3 +1,6 @@
+# authors: Veera Marni and Naveenkumar Ramaraju
+# License: MIT
+# To deploy apache zeppelin using ansible via cmd
 import time
 from cloudmesh_client.common.Shell import Shell
 from write2files import HostsWriter
