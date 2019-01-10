@@ -1,0 +1,13 @@
+---
+- name: get R package source
+  git:
+    repo: "{{ repository }}"
+    dest: "{{ tmp }}"
+
+- name: build and install R
+  become: yes
+  command: chdir="{{ tmp }}" "{{ item }}"
+  with_items:
+    - ./configure
+    - make
+    - make install

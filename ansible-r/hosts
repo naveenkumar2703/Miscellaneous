@@ -1,0 +1,3 @@
+[R_hosts]
+129.114.33.144 ansible_ssh_user=cc
+
